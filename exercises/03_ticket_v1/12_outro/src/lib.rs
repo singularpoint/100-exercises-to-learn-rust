@@ -11,3 +11,51 @@
 // Integration here has a very specific meaning: they test **the public API** of your project.
 // You'll need to pay attention to the visibility of your types and methods; integration
 // tests can't access private or `pub(crate)` items.
+
+pub struct Order {
+    product_name: String,
+    quantity: u32,
+    unit_price: u32,
+}
+
+impl Order {
+    pub fn new(product_name: String, quantity: u32, unit_price: u32) -> Order {
+        Order {
+            product_name: validate_product_name(product_name),
+            quantity: validate_natural(quantity),
+            unit_price: validate_natural(unit_price),
+        }
+    }
+    
+    pub fn total(&self) -> u32 { self.quantity * self.unit_price }
+    
+    pub fn product_name(&self) -> &str { &self.product_name }
+    
+    pub fn quantity(&self) -> &u32 { &self.quantity }
+    
+    pub fn unit_price(&self) -> &u32 { &self.unit_price }
+    
+    pub fn set_product_name(&mut self, product_name: String) {
+        self.product_name = validate_product_name(product_name)
+    }
+
+    pub fn set_quantity(&mut self, quantity: u32) {
+        self.quantity = validate_natural(quantity)
+    }
+
+    pub fn set_unit_price(&mut self, unit_price: u32) {
+        self.unit_price = validate_natural(unit_price)
+    }
+}
+
+fn validate_natural(number: u32) -> u32 {
+    if number > 0 { number } else { panic!("Number can't be zero") }
+}
+
+fn validate_product_name(product_name: String) -> String {
+    match product_name.len() {
+        0 => panic!("Empty product name"),
+        301.. => panic!("Too long product name"),
+        _ => product_name,
+    }
+}
