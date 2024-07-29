@@ -15,7 +15,16 @@ pub fn fibonacci(n: u32) -> u32 {
     //
     // Hint: use a `Vec` to memoize the results you have already calculated
     // so that you don't have to recalculate them several times.
-    todo!()
+    let n_usize: usize = n.try_into().unwrap();
+    let mut fib_vec = Vec::<u32>::with_capacity(n_usize + 1);
+    for i in 0..=n_usize {
+        match i {
+            0 => fib_vec.push(0),
+            1 => fib_vec.push(1),
+            _ => fib_vec.push(fib_vec[i-2] + fib_vec[i-1]),
+        }
+    }
+    fib_vec[n_usize]
 }
 
 #[cfg(test)]
