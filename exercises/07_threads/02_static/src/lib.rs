@@ -2,9 +2,13 @@
 //  sum each half in a separate thread.
 //  Do not allocate any additional memory!
 use std::thread;
+use std::thread::JoinHandle;
 
 pub fn sum(slice: &'static [i32]) -> i32 {
-    todo!()
+    let (ls, rs) = slice.split_at(slice.len() / 2);
+    let thread_half1: JoinHandle<i32> = thread::spawn(|| { ls.iter().sum() });
+    let thread_half2: JoinHandle<i32> = thread::spawn(|| { rs.iter().sum() });
+    thread_half1.join().unwrap() + thread_half2.join().unwrap()
 }
 
 #[cfg(test)]
